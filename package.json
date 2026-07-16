@@ -1,0 +1,15 @@
+{
+  "name": "insurance-whatsapp-bot",
+  "version": "1.0.0",
+  "description": "Free WhatsApp Cloud API lead-capture bot for an insurance agency",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
