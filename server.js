@@ -40,7 +40,8 @@ function saveDB(db) {
 // ---------- WhatsApp send helper ----------
 async function sendWhatsAppMessage(to, body) {
   const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
-  await axios.post(
+  console.log(`[SEND] Attempting to message ${to}: "${body.slice(0, 50)}..."`);
+  const res = await axios.post(
     url,
     {
       messaging_product: "whatsapp",
@@ -50,6 +51,7 @@ async function sendWhatsAppMessage(to, body) {
     },
     { headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}` } }
   );
+  console.log(`[SEND OK] Meta accepted message, id: ${res.data?.messages?.[0]?.id}`);
 }
 
 // ---------- optional free advisor notification via Telegram ----------
@@ -87,12 +89,16 @@ app.get("/webhook", (req, res) => {
 // ---------- 2. Incoming messages ----------
 app.post("/webhook", async (req, res) => {
   res.sendStatus(200); // ack Meta immediately; process after
+  console.log("[WEBHOOK HIT]", JSON.stringify(req.body));
 
   try {
     const entry = req.body.entry?.[0];
     const change = entry?.changes?.[0]?.value;
     const message = change?.messages?.[0];
-    if (!message || message.type !== "text") return; // ignore statuses/non-text for simplicity
+    if (!message || message.type !== "text") {
+      console.log("[WEBHOOK] No text message in payload (likely a status update) - ignoring.");
+      return;
+    }
 
     const from = message.from; // customer's phone number
     const text = message.text.body.trim();
