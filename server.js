@@ -41,17 +41,22 @@ function saveDB(db) {
 async function sendWhatsAppMessage(to, body) {
   const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
   console.log(`[SEND] Attempting to message ${to}: "${body.slice(0, 50)}..."`);
-  const res = await axios.post(
-    url,
-    {
-      messaging_product: "whatsapp",
-      to,
-      type: "text",
-      text: { body },
-    },
-    { headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}` } }
-  );
-  console.log(`[SEND OK] Meta accepted message, id: ${res.data?.messages?.[0]?.id}`);
+  try {
+    const res = await axios.post(
+      url,
+      {
+        messaging_product: "whatsapp",
+        to,
+        type: "text",
+        text: { body },
+      },
+      { headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}` } }
+    );
+    console.log(`[SEND OK] Meta accepted message, id: ${res.data?.messages?.[0]?.id}`);
+  } catch (err) {
+    console.error("[SEND FAILED] Meta's actual error message:", JSON.stringify(err.response?.data, null, 2));
+    throw err;
+  }
 }
 
 // ---------- optional free advisor notification via Telegram ----------
