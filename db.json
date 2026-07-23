@@ -1,0 +1,31 @@
+{
+  "sessions": {
+    "919953024153": {
+      "state": "AWAITING_INTENT",
+      "data": {}
+    },
+    "919212391994": {
+      "state": "HUMAN_TAKEOVER",
+      "data": {
+        "product": "Health",
+        "name": "R k",
+        "details": "50"
+      }
+    },
+    "918306170057": {
+      "state": "AWAITING_INTENT",
+      "data": {}
+    }
+  },
+  "leads": [
+    {
+      "phone": "919212391994",
+      "product": "Health",
+      "name": "R k",
+      "details": "50",
+      "createdAt": "2026-07-22T17:18:19.139Z",
+      "advisor": "Rohit"
+    }
+  ],
+  "nextAdvisorIndex": 1
+}
