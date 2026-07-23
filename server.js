@@ -37,7 +37,7 @@ function saveDB(db) {
   fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
 }
 
-// ---------- WhatsApp send helper ----------
+// ---------- WhatsApp send helpers ----------
 async function sendWhatsAppMessage(to, body) {
   const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
   console.log(`[SEND] Attempting to message ${to}: "${body.slice(0, 50)}..."`);
@@ -53,6 +53,35 @@ async function sendWhatsAppMessage(to, body) {
       { headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}` } }
     );
     console.log(`[SEND OK] Meta accepted message, id: ${res.data?.messages?.[0]?.id}`);
+  } catch (err) {
+    console.error("[SEND FAILED] Meta's actual error message:", JSON.stringify(err.response?.data, null, 2));
+    throw err;
+  }
+}
+
+// Sends a tap-to-select list (up to 10 rows) instead of plain numbered text.
+async function sendWhatsAppList(to, bodyText, buttonText, rows) {
+  const url = `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`;
+  console.log(`[SEND LIST] To ${to}, options: ${rows.map((r) => r.title).join(", ")}`);
+  try {
+    const res = await axios.post(
+      url,
+      {
+        messaging_product: "whatsapp",
+        to,
+        type: "interactive",
+        interactive: {
+          type: "list",
+          body: { text: bodyText },
+          action: {
+            button: buttonText,
+            sections: [{ title: "Insurance Types", rows }],
+          },
+        },
+      },
+      { headers: { Authorization: `Bearer ${WHATSAPP_TOKEN}` } }
+    );
+    console.log(`[SEND OK] Meta accepted list message, id: ${res.data?.messages?.[0]?.id}`);
   } catch (err) {
     console.error("[SEND FAILED] Meta's actual error message:", JSON.stringify(err.response?.data, null, 2));
     throw err;
@@ -100,13 +129,26 @@ app.post("/webhook", async (req, res) => {
     const entry = req.body.entry?.[0];
     const change = entry?.changes?.[0]?.value;
     const message = change?.messages?.[0];
-    if (!message || message.type !== "text") {
-      console.log("[WEBHOOK] No text message in payload (likely a status update) - ignoring.");
+    if (!message) {
+      console.log("[WEBHOOK] No message in payload (likely a status update) - ignoring.");
+      return;
+    }
+
+    // A typed message gives message.text.body.
+    // A tapped list option gives message.interactive.list_reply.id instead.
+    let text;
+    if (message.type === "text") {
+      text = message.text.body.trim();
+    } else if (message.type === "interactive" && message.interactive?.type === "list_reply") {
+      text = message.interactive.list_reply.id; // we set these ids to "1".."6" below
+    } else if (message.type === "interactive" && message.interactive?.type === "button_reply") {
+      text = message.interactive.button_reply.id;
+    } else {
+      console.log(`[WEBHOOK] Unhandled message type "${message.type}" - ignoring.`);
       return;
     }
 
     const from = message.from; // customer's phone number
-    const text = message.text.body.trim();
     const db = loadDB();
     const session = db.sessions[from] || { state: "NEW", data: {} };
 
@@ -135,12 +177,19 @@ async function handleMessage(db, session, from, text) {
 
   switch (session.state) {
     case "NEW": {
-      // Greeting
-      await sendWhatsAppMessage(
+      // Greeting - now sent as a tap-to-select list instead of "type a number"
+      await sendWhatsAppList(
         from,
-        "Namaste! \uD83D\uDE4F Welcome to [Agency Name] Insurance Services.\n" +
-          "Which insurance are you looking for?\n\n" +
-          "1. Health\n2. Motor\n3. Life\n4. Term\n5. Travel\n6. Home"
+        "Namaste! \uD83D\uDE4F Welcome to [Agency Name] Insurance Services.\nWhich insurance are you looking for?",
+        "Choose insurance",
+        [
+          { id: "1", title: "Health" },
+          { id: "2", title: "Motor" },
+          { id: "3", title: "Life" },
+          { id: "4", title: "Term" },
+          { id: "5", title: "Travel" },
+          { id: "6", title: "Home" },
+        ]
       );
       session.state = "AWAITING_INTENT";
       break;

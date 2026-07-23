@@ -4,7 +4,10 @@ const axios = require("axios");
 const sentMessages = [];
 axios.post = async (url, body) => {
   if (url.includes("graph.facebook.com")) {
-    sentMessages.push(body.text.body);
+    const text = body.type === "interactive"
+      ? `[LIST] ${body.interactive.body.text} -> options: ${body.interactive.action.sections[0].rows.map(r => r.title).join(", ")}`
+      : body.text.body;
+    sentMessages.push(text);
     return { data: { messages: [{ id: "wamid.mock" }] } };
   }
   return { data: {} }; // telegram etc.
@@ -21,6 +24,18 @@ const server = app.listen(0); // random free port
 function fakeMessage(from, text) {
   return {
     entry: [{ changes: [{ value: { messages: [{ from, type: "text", text: { body: text } }] } }] }],
+  };
+}
+
+function fakeListTap(from, id, title) {
+  return {
+    entry: [{
+      changes: [{
+        value: {
+          messages: [{ from, type: "interactive", interactive: { type: "list_reply", list_reply: { id, title } } }],
+        },
+      }],
+    }],
   };
 }
 
@@ -41,10 +56,17 @@ function post(port, payload) {
 (async () => {
   const port = server.address().port;
   const phone = "919876543210";
-  const turns = ["Hi", "1", "Rohit Sharma", "Pune, 34", "yes"];
+  const turns = [
+    { type: "text", value: "Hi" },
+    { type: "list", value: { id: "1", title: "Health" } }, // simulates tapping "Health" in the list
+    { type: "text", value: "Rohit Sharma" },
+    { type: "text", value: "Pune, 34" },
+    { type: "text", value: "yes" },
+  ];
 
   for (const turn of turns) {
-    await post(port, fakeMessage(phone, turn));
+    const payload = turn.type === "text" ? fakeMessage(phone, turn.value) : fakeListTap(phone, turn.value.id, turn.value.title);
+    await post(port, payload);
     await new Promise((r) => setTimeout(r, 150)); // let async handler finish
   }
 
