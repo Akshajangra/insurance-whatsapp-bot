@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "lexical-theory-503305-q1",
+  "private_key_id": "11527d66d42ffaf18b1be121c217891f90e4e671",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCqVcYXO6M3i6KA\nPw0HlDM+yyg454ASPPajSFEErtvvfuSLcKjAJBPia8yoHhpdfgFWAAuvNugboM3g\n54++WC/9SeVhIccTAwsblv4UdIpiiacYwD+cviAOagleYV5zmlehTYXhB3W8Dyr0\n6ieuEa+gJ7vcBPKdPYYR0/FFALhdBCTvvWKF5gTW+UGQCug+oMvaLDEEBOCi4pB/\nsteOvOwz/FpH6xtYubmgB0s6SMl3DDTwHZLz50mIkmAkxNHkrI2VYmQydhuuTVWc\nt4Vks2U3t4vbYtYUaNtk/zH0tx4Juc83My5FIITvydHbI/TdgdYsH174wTVmBsEa\nuJgadkpnAgMBAAECggEAFi6iuWvUJED+9zc+zySG9+p6YSQPaFCgHet7rDceqosa\niujaUQthu4l7rCPKHdrG+cLPwrr3xyv4eQ2ENARFW6A/9ZecgTv9j6jo4GkSNyWN\n/onVaZLTlzef42FIF5ibSNpQ+65+WptEZi4INNcAyW6N5xKN4IRJQrvDHnqq3RHy\nnUAMVzoZ/noQa3+NT1qHJKyTi6QA2ABroNmFFWNiFWQFKq9bblrJ0TcIiiNWx8A0\nWTMDaEEWCgbHB6e9WioYPRMkZsDneKNeqemqbN9lUOIRzhveUxQO2pvG4sTYwLLT\nyJ/9rwQpZIYKbyTi6zJ9Gs4ZFRE6ZNtJ7b/mFGMD4QKBgQDdRlgy0bDF55mC95a8\ne/UNp+O/oFHmFiK6EvS4C5HzHc3H75Nu+gX+p3yIaJlp6OEg+4rRIpPYvD7pCeeQ\nwUkuwQNaXqbLKKhx0XzjydGle6DbqwR7py90rQojtv03Rn3y+pIeoBIq2ACVn5xT\ni/kvl5/1U4anH5nKkVHcG/zL+wKBgQDFEPBv1e3wutxHNRH2SBhKhLfwXPQnbDJP\nkVeuXOE9iGGG591E2tDrruNVpBiHfxTCKoEFjI/XphFIreDS27xniHtPR5eyTO1/\n2dtbI85JTgtUUWSoxBljZivNX/gGq9mfBdgu6N6/Qa0w4Pbe8kQ2W9m40W65SSy6\nwUH8NycjhQKBgQDcY+MXAsn549p/mpC1PRVvu4fY5hqMfAGsqZK6+TMuHcJHYHTN\nNRPhdvpPdzdOSJhq3H+AG9t8JMrYG3hcMlfszGvFh77DXMShUND+pJY+J6uo/2Yg\nrv1STcNqnSkJ9BkgeLgu7qoJqEi0vlvazvCrmW7Fz6KvNIdePm11OR8KHwKBgFla\nuOq8wcrpr3/KHH7jacBANXcTbtGBSb6yVGOHUcoo0K/u6nGSFjEHd6UZZtXpVWxF\nAYOWnJJXhnbCALMbV25KgD8OY0ZBg175VXEZ5ytt680rqsyrPifH6AyTe07rFR35\n9HAwvu9RxEnpd4bXqv5K34nhzKbO+y0i+9x01ZZRAoGBAJvC6fCjL9bhhlugrRFb\nEC01uoG/dW+pJKYSKCpNTnR2xsQyS99abP/dBHepZoDLQbaBH4mghBPDranYDNM0\nODtgiKtXBL+v0AVnKCRVXdjaE5C7T58p51LG28ODTbPf3aUAjiJaLmT2sde95PRc\nWJiYnchRJwBsOLnPrRZsom2I\n-----END PRIVATE KEY-----\n",
+  "client_email": "whatsapp-bot-sheets@lexical-theory-503305-q1.iam.gserviceaccount.com",
+  "client_id": "110464207885127387548",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/whatsapp-bot-sheets%40lexical-theory-503305-q1.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

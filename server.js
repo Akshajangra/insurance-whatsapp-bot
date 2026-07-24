@@ -10,6 +10,7 @@ const express = require("express");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { appendLeadToSheet } = require("./sheets");
 
 const app = express();
 app.use(express.json());
@@ -238,6 +239,10 @@ async function handleMessage(db, session, from, text) {
         // Assign Sales Advisor
         const advisor = nextAdvisor(db);
         lead.advisor = advisor;
+
+        // Persist to Google Sheets so the lead survives Render restarts and is
+        // easy for advisors to view/sort - falls back gracefully if not yet configured.
+        await appendLeadToSheet(lead);
 
         // Notify advisor (internal) - free via Telegram, see README
         await notifyAdvisor(advisor, lead);
